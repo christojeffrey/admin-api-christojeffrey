@@ -1,6 +1,3 @@
-name = "verify-rsa-jwt-cloudflare-worker"
-compatibility_date = "2023-05-18"
-
 [vars]
 JWKS_URI = "https://christojeffrey.kinde.com/.well-known/jwks"
 VERIFY_RSA_JWT="JWK_CACHE"
