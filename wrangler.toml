@@ -1,7 +1,6 @@
 [vars]
 JWKS_URI = "https://christojeffrey.kinde.com/.well-known/jwks"
-VERIFY_RSA_JWT="JWK_CACHE"
 
 [[kv_namespaces]]
-binding = "JWK_CACHE"
-id = "e909b11fee604b1bb2e93953189c26a5"
+binding = "JWKS_CACHE"
+id = "cedf2f386f8741aaba65f086515bbbf3"
