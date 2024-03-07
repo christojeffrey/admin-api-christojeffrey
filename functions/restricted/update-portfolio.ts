@@ -9,26 +9,37 @@ import { Redis } from "@upstash/redis/cloudflare";
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   // validate the request body
 
-  const portfolioItem: Portfolio = await readRequestBody(context.request);
+  const portfolioItems: Portfolio[] = await readRequestBody(context.request);
 
-  if (!validatePortfolioItem(portfolioItem)) {
+  if (!Array.isArray(portfolioItems)) {
     return new Response(
       JSON.stringify({
-        error: "Invalid request body",
-        body: portfolioItem,
+        error: "Invalid request body. must be an array",
+        body: portfolioItems,
       }),
       { status: 400, headers: { "content-type": "application/json" } }
     );
   }
+
+  portfolioItems.forEach((portfolioItem) => {
+    if (!validatePortfolioItem(portfolioItem)) {
+      return new Response(
+        JSON.stringify({
+          error: "Invalid request body",
+          body: portfolioItem,
+        }),
+        { status: 400, headers: { "content-type": "application/json" } }
+      );
+    }
+  });
   const redis = Redis.fromEnv({
     UPSTASH_REDIS_REST_URL: context.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: context.env.UPSTASH_REDIS_REST_TOKEN,
   });
-  // get the count of portfolio items
-  await redis.json.arrappend("portfolio", "$", portfolioItem);
+  await redis.json.set("portfolio", "$", JSON.stringify(portfolioItems));
 
   // return a response
-  return new Response(JSON.stringify({ foo: portfolioItem }), {
+  return new Response(JSON.stringify({ portfolioItems }), {
     headers: { "content-type": "application/json" },
   });
 };
