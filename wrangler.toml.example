@@ -1,0 +1,9 @@
+compatibility_date = "2023-04-05"
+[vars]
+JWKS_URI = "https://christojeffrey.kinde.com/.well-known/jwks"
+UPSTASH_REDIS_REST_TOKEN = "asfd"
+UPSTASH_REDIS_REST_URL = "https://.upstash.io"
+
+[[kv_namespaces]]
+binding = "ADMIN_API_CHRISTOJEFFREY_CACHE"
+id = ""

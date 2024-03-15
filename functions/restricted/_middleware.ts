@@ -1,7 +1,7 @@
 import { getJwks, useKVStore, verify, KVNamespaceOrKeyValueStore } from "verify-rsa-jwt-cloudflare-worker";
 interface Env {
   JWKS_URI: string;
-  JWKS_CACHE: KVNamespaceOrKeyValueStore;
+  ADMIN_API_CHRISTOJEFFREY_CACHE: KVNamespaceOrKeyValueStore;
 }
 
 async function validateAccessToken(jwkUri, jwksCacheKV, token): Promise<{ error: boolean }> {
@@ -24,7 +24,7 @@ async function validateAccessToken(jwkUri, jwksCacheKV, token): Promise<{ error:
 
 const middlewareAuthenticate: PagesFunction<Env> = async (context) => {
   const token = context.request.headers.get("Authorization")?.replace(/Bearer\s+/i, "") || "";
-  const { error } = await validateAccessToken(context.env.JWKS_URI, context.env.JWKS_CACHE, token);
+  const { error } = await validateAccessToken(context.env.JWKS_URI, context.env.ADMIN_API_CHRISTOJEFFREY_CACHE, token);
   if (error) {
     return new Response("Unauthorized", { status: 403 });
   }
