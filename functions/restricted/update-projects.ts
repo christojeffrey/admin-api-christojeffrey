@@ -5,28 +5,28 @@ interface Env {
 
 import { Redis } from "@upstash/redis/cloudflare";
 import { readRequestBody } from "../../utils";
-// add a portfolio item
+// add a project item
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   // validate the request body
 
-  const portfolioItems: Portfolio[] = await readRequestBody(context.request);
+  const projects: Project[] = await readRequestBody(context.request);
 
-  if (!Array.isArray(portfolioItems)) {
+  if (!Array.isArray(projects)) {
     return new Response(
       JSON.stringify({
         error: "Invalid request body. must be an array",
-        body: portfolioItems,
+        body: projects,
       }),
       { status: 400, headers: { "content-type": "application/json" } }
     );
   }
 
-  portfolioItems.forEach((portfolioItem) => {
-    if (!validatePortfolioItem(portfolioItem)) {
+  projects.forEach((projectItem) => {
+    if (!validateProject(projectItem)) {
       return new Response(
         JSON.stringify({
           error: "Invalid request body",
-          body: portfolioItem,
+          body: projectItem,
         }),
         { status: 400, headers: { "content-type": "application/json" } }
       );
@@ -36,22 +36,22 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     UPSTASH_REDIS_REST_URL: context.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: context.env.UPSTASH_REDIS_REST_TOKEN,
   });
-  await redis.json.set("portfolio", "$", JSON.stringify(portfolioItems));
+  await redis.json.set("project", "$", JSON.stringify(projects));
 
   // return a response
-  return new Response(JSON.stringify({ portfolioItems }), {
+  return new Response(JSON.stringify({ projects }), {
     headers: { "content-type": "application/json" },
   });
 };
 
-interface Portfolio {
+interface Project {
   title: string;
   description: string;
   youtubeLink: string;
 }
 
-function validatePortfolioItem(portfolioItem: Portfolio) {
-  if (!portfolioItem.title || !portfolioItem.description || !portfolioItem.youtubeLink) {
+function validateProject(project: Project) {
+  if (!project.title || !project.description || !project.youtubeLink) {
     return false;
   }
   return true;
