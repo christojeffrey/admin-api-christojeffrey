@@ -1,21 +1,14 @@
-interface Env {
-  UPSTASH_REDIS_REST_URL: string;
-  UPSTASH_REDIS_REST_TOKEN: string;
-}
-
 import { Redis } from "@upstash/redis/cloudflare";
-import { readRequestBody } from "../../utils";
-// add a project item
-export const onRequestPost: PagesFunction<Env> = async (context) => {
-  // validate the request body
+import { Env, Project } from "../../../types";
+import { readRequestBody } from "../../../utils";
 
+export async function updateProjectsHandler(context: EventContext<Env, any, Record<string, unknown>>) {
   const projects: Project[] = await readRequestBody(context.request);
 
   if (!Array.isArray(projects)) {
     return new Response(
       JSON.stringify({
         error: "Invalid request body. must be an array",
-        body: projects,
       }),
       { status: 400, headers: { "content-type": "application/json" } }
     );
@@ -42,12 +35,6 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   return new Response(JSON.stringify({ projects }), {
     headers: { "content-type": "application/json" },
   });
-};
-
-interface Project {
-  title: string;
-  description: string;
-  youtubeLink: string;
 }
 
 function validateProject(project: Project) {
