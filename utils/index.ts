@@ -14,7 +14,15 @@ export async function readRequestBody(request) {
         body[entry[0]] = entry[1];
       }
       return JSON.stringify(body);
+    } else if (contentType.includes("image/jpeg")) {
+      const formData = await request.formData();
+      const photo = formData.get("photo");
+      return photo.arrayBuffer((buffer) => {
+        return buffer;
+      });
     } else {
+      console.log("contentType");
+      console.log(contentType);
       // Perhaps some other type of data was submitted in the form
       // like an image, or some other binary data.
       return "a file";
