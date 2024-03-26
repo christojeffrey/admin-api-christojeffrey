@@ -25,4 +25,4 @@ export const corsHandling = async (context) => {
   return response;
 };
 
-export const onRequest = [errorHandling, onRequestOptions, corsHandling];
+export const onRequest = [errorHandling, corsHandling];
