@@ -4,7 +4,6 @@ import { readRequestBody } from "../../../utils";
 
 export async function updateExperiencesHandler(context: EventContext<Env, any, Record<string, unknown>>) {
   const experiences: Experience[] = await readRequestBody(context.request);
-
   if (!Array.isArray(experiences)) {
     return new Response(
       JSON.stringify({
@@ -29,7 +28,7 @@ export async function updateExperiencesHandler(context: EventContext<Env, any, R
     UPSTASH_REDIS_REST_URL: context.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: context.env.UPSTASH_REDIS_REST_TOKEN,
   });
-  await redis.json.set("photos", "$", JSON.stringify(experiences));
+  await redis.json.set("experiences", "$", JSON.stringify(experiences));
 
   // return a response
   return new Response(JSON.stringify({ experiences }), {

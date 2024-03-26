@@ -21,8 +21,6 @@ export async function readRequestBody(request) {
         return buffer;
       });
     } else {
-      console.log("contentType");
-      console.log(contentType);
       // Perhaps some other type of data was submitted in the form
       // like an image, or some other binary data.
       return "a file";

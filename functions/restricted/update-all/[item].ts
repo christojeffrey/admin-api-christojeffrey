@@ -12,7 +12,6 @@ import { updateProjectsHandler } from "./projectsHandler";
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   // validate the request body
   const item: string = context.params.item as string;
-
   if (!validItems.includes(item)) {
     return new Response(
       JSON.stringify({
